@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/widget_background">
+
+    <!-- Header with stop name -->
+    <TextView
+        android:id="@+id/stopNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Keskustori"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:paddingBottom="4dp" />
+
+    <!-- Last update time -->
+    <TextView
+        android:id="@+id/updateTimeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Updated: --:--"
+        android:textSize="10sp"
+        android:textColor="#666666"
+        android:paddingBottom="8dp" />
+
+    <!-- Departures text (simplified - shows all departures in one TextView) -->
+    <TextView
+        android:id="@+id/departuresText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:textSize="13sp"
+        android:textColor="#000000"
+        android:lineSpacingExtra="2dp"
+        android:fontFamily="monospace" />
+
+</LinearLayout>

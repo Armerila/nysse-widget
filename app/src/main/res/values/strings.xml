@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NysseWidget</string>
+    <string name="widget_description">Shows next tram departures</string>
 </resources>
