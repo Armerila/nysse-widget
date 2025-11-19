@@ -18,11 +18,12 @@ Edit this line:
 ```kotlin
 private val API_KEY = "YOUR_API_KEY_HERE"
 ```
-Or
+
+Alternatively:
 
 Add this to your local.properties:
 ```kotlin
-DIGITRANSIT_API_KEY=<YOUR_API_KEY_HERE>
+DIGITRANSIT_API_KEY=YOUR_API_KEY_HERE
 ```
 
 #### Open and run in Android Studio
