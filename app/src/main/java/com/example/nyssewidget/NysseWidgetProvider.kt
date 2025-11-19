@@ -4,17 +4,25 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.widget.RemoteViews
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class NysseWidgetProvider : AppWidgetProvider() {
 
     // Pyhällönpuisto B
     private val stopId = "tampere:0873"
+
+    companion object {
+        private const val WORK_NAME = "widget_update_work"
+    }
 
     override fun onUpdate(
         context: Context,
@@ -25,6 +33,28 @@ class NysseWidgetProvider : AppWidgetProvider() {
         for (appWidgetId in appWidgetIds) {
             updateWidget(context, appWidgetManager, appWidgetId)
         }
+    }
+
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        schedulePeriodicUpdates(context)
+    }
+
+    override fun onDisabled(context: Context) {
+        super.onDisabled(context)
+        WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
+    }
+    // Minimum allowed update rate 15min
+    private fun schedulePeriodicUpdates(context: Context) {
+        val updateRequest = PeriodicWorkRequestBuilder<WidgetUpdateWorker>(
+            15, TimeUnit.MINUTES
+        ).build()
+
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            WORK_NAME,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            updateRequest
+        )
     }
 
     private fun updateWidget(
