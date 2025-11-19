@@ -3,6 +3,8 @@ package com.example.nyssewidget
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.app.PendingIntent
+import android.content.Intent
 import android.widget.RemoteViews
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
@@ -22,6 +24,7 @@ class NysseWidgetProvider : AppWidgetProvider() {
 
     companion object {
         private const val WORK_NAME = "widget_update_work"
+        private const val ACTION_REFRESH = "com.example.nyssewidget.REFRESH_WIDGET"
     }
 
     override fun onUpdate(
@@ -44,6 +47,23 @@ class NysseWidgetProvider : AppWidgetProvider() {
         super.onDisabled(context)
         WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
     }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+
+        if (intent.action == ACTION_REFRESH) {
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val appWidgetId = intent.getIntExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID
+            )
+
+            if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+                updateWidget(context, appWidgetManager, appWidgetId)
+            }
+        }
+    }
+
     // Minimum allowed update rate 15min
     private fun schedulePeriodicUpdates(context: Context) {
         val updateRequest = PeriodicWorkRequestBuilder<WidgetUpdateWorker>(
@@ -85,6 +105,19 @@ class NysseWidgetProvider : AppWidgetProvider() {
         stopInfo: StopInfo
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_layout)
+
+        // Set up refresh button click
+        val refreshIntent = Intent(context, NysseWidgetProvider::class.java).apply {
+            action = ACTION_REFRESH
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        }
+        val refreshPendingIntent = PendingIntent.getBroadcast(
+            context,
+            appWidgetId,
+            refreshIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        views.setOnClickPendingIntent(R.id.refreshButton, refreshPendingIntent)
 
         val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         val updateTime = timeFormat.format(Date())

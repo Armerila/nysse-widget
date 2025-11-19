@@ -6,16 +6,34 @@
     android:padding="12dp"
     android:background="@drawable/widget_background">
 
-    <!-- Header with stop name -->
-    <TextView
-        android:id="@+id/stopNameText"
+    <!-- Header row with stop name and refresh button -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Keskustori"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        android:paddingBottom="4dp" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/stopNameText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Stop name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <!-- Refresh button -->
+        <ImageButton
+            android:id="@+id/refreshButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_popup_sync"
+            android:contentDescription="Refresh"
+            android:scaleType="fitCenter" />
+
+    </LinearLayout>
 
     <!-- Last update time -->
     <TextView
@@ -27,7 +45,7 @@
         android:textColor="#666666"
         android:paddingBottom="8dp" />
 
-    <!-- Departures text (simplified - shows all departures in one TextView) -->
+    <!-- Departures text -->
     <TextView
         android:id="@+id/departuresText"
         android:layout_width="match_parent"
