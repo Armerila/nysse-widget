@@ -24,6 +24,14 @@ xmlns:tools="http://schemas.android.com/tools">
         </receiver>
 
         <activity
+            android:name=".WidgetConfigActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
